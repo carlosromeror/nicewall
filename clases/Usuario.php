@@ -1,19 +1,19 @@
 <?php 
 
+
 class Usuario{
 	private $nidUsuario;
 	private $snombre;
 	private $susuario;
 	private $sclave;
         private $stipoUsuario;
-	private $smail;
-        
-	function __construct($snom,$susr,$sclave,$tipoUsuario,$smail){
+	        
+	function __construct($snom,$susr,$sclave,$tipoUsuario){
 		$this->snombre=$snom;
 		$this->susuario=$susr;
 		$this->sclave=md5($sclave);
                 $this->stipoUsuario=$stipo;
-                $this->smail=$semail;
+                
 	}
 	public function getNombre(){
 		return $this->snombre;
@@ -43,15 +43,12 @@ class Usuario{
             return $this->stipoUsuario;
         }
 
-        public function getSmail() {
-            return $this->smail;
-        }
-
+        
         
 	function VerificaUsuario(){
 		$db=dbconnect();
-		$sqlsel="select nombre from acceso
-		where nomusuario=:usr";
+		$sqlsel="select nombreUsuario from usuario
+		where user=:usr";
 
 		$querysel=$db->prepare($sqlsel);
 
@@ -66,7 +63,7 @@ class Usuario{
 
 	function VerificaAcceso(){
 		$db=dbconnect();
-		$sqlsel="select idacceso,nombre from acceso
+		$sqlsel="select idUsuario,nombreUsuario from usuario
 		where nomusuario=:usr and pwdusuario=:pwd";
 
 		$querysel=$db->prepare($sqlsel);
@@ -80,8 +77,8 @@ class Usuario{
                     
                     $registro = $querysel->fetch();
                     
-                    $this->snombre=$registro['nombre'];
-                    $this->nidUsuario=$registro['idacceso'];
+                    $this->snombre=$registro['nombreUsuario'];
+                    $this->nidUsuario=$registro['idUsuario'];
 			return true;
 		}
 		else{
@@ -93,8 +90,8 @@ class Usuario{
 	function ActualizaClave($snewpwd){
 		$db=dbconnect();
 
-		$sqlupd="update acceso set pwdusuario=:pwd
-					where idacceso=:id";
+		$sqlupd="update usuario set pass=:pwd
+					where idUsuario=:id";
 
 		$querysel=$db->prepare($sqlupd);
 
